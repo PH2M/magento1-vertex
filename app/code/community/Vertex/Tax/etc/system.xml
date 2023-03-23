@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @copyright   Vertex. All rights reserved.    https://www.vertexinc.com/
+ * @author      Mediotype                       https://www.mediotype.com/
+ */
+-->
+<config>
+    <sections>
+        <tax translate="label" module="tax">
+            <groups>
+                <vertex_settings translate="label">
+                    <label>Vertex Settings</label>
+                    <sort_order>2</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<p class="switcher">You can find settings at <a href="https://csportal.vertexsmb.com/" target="_blank">Vertex TaxCentral</a></p>]]></comment>
+                    <fields>
+                        <enable_vertex translate="label">
+                            <label>Enable Vertex Tax Calculation</label>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <comment><![CDATA[Enable/Disable Extension]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </enable_vertex>
+                        <vertex_status translate="label">
+                            <label>Vertex API Status</label>
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>vertextax/adminhtml_system_config_form_field_vertexStatus</frontend_model>
+                            <comment><![CDATA[API credentials status]]></comment>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </vertex_status>
+                        <api_url translate="label">
+                            <label>Vertex Calculation API Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <validate>required-entry</validate>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[Vertex Calculation API Url.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </api_url>
+                        <address_api_url translate="label">
+                            <label>Vertex Address Validation API Url</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>17</sort_order>
+                            <validate>required-entry</validate>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[Vertex Address Validation API Url.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </address_api_url>
+                        <trustedId translate="label">
+                            <label>Vertex Trusted Id</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <validate>required-entry</validate>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[An identifier supplied by an ERP.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </trustedId>
+                        <invoice_order translate="label">
+                            <label>Invoice Tax</label>
+                            <source_model>vertextax/source_taxinvoice</source_model>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>40</sort_order>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[Please select when tax should be invoiced to Vertex]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </invoice_order>
+                        <invoice_order_status translate="label">
+                            <label>Invoice When Order Status</label>
+                            <source_model>adminhtml/system_config_source_order_status</source_model>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>50</sort_order>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                                <invoice_order><![CDATA[order_status]]></invoice_order>
+                            </depends>
+                            <comment><![CDATA[Please select order status]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </invoice_order_status>
+                        <allow_cart_request translate="label">
+                            <label>Allow tax quote request at shopping cart page</label>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>70</sort_order>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[Allowing quote request on cart page may affect number of requests.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </allow_cart_request>
+                        <show_manual_button translate="label">
+                            <label>Show Manual Invoice Button</label>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>80</sort_order>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[Enabeling this option may affect usual invoice workflow. Please use it only for debug/development purposes.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_manual_button>
+                        <show_tarequest_popup translate="label">
+                            <label>Show Tax Jurisdiction(s) Popup</label>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>100</sort_order>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[Enable/Disable Tax Jurisdiction(s) popup window on checkout and admin create order page]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </show_tarequest_popup>
+                        <enable_logging>
+                            <label>Enable Logging</label>
+                            <source_model>adminhtml/system_config_source_yesno</source_model>
+                            <frontend_type>select</frontend_type>
+                            <sort_order>120</sort_order>
+                            <depends>
+                                <enable_vertex>1</enable_vertex>
+                            </depends>
+                            <comment><![CDATA[Enable/Disable logging for the extension]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store></enable_logging>
+                    </fields>
+                </vertex_settings>
+                <vertex_seller_info translate="label">
+                    <label>Vertex Company Information</label>
+                    <sort_order>3</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <fields>
+                        <company translate="label">
+                            <label>Company Code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>10</sort_order>
+                            <comment><![CDATA[ The Vertex TaxCentral user interface is used to set up any taxability rules that apply at this level. This should be a parameter that is configurable to data from the host system based on an individual company's legal and tax requirements.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </company>
+                        <location_code translate="label">
+                            <label>Location Code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>15</sort_order>
+                            <comment><![CDATA[The locationCode attribute on the line item represents the store location code that is used for returns filing]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </location_code>
+                        <streetAddress1 translate="label">
+                            <label>Company Street Address</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>20</sort_order>
+                            <comment><![CDATA[The first line of the street address.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </streetAddress1>
+                        <streetAddress2 translate="label">
+                            <label>Company Street Address 2</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <comment><![CDATA[The second line of the street address.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </streetAddress2>
+                        <city translate="label">
+                            <label>Company City</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>40</sort_order>
+                            <comment><![CDATA[The proper name of the city used to determine Tax Jurisdiction(s)]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </city>
+                        <country_id translate="label">
+                            <label>Company Country</label>
+                            <frontend_type>select</frontend_type>
+                            <frontend_class>countries</frontend_class>
+                            <source_model>adminhtml/system_config_source_country</source_model>
+                            <sort_order>60</sort_order>
+                            <comment><![CDATA[The country used to determine the Tax Jurisdiction(s)]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </country_id>
+                        <region_id translate="label">
+                            <label>Company State</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>70</sort_order>
+                            <comment><![CDATA[The proper name or the postal abbreviation of the state, province, or territory used to determine Tax Jurisdiction(s)]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </region_id>
+                        <postalCode translate="label">
+                            <label>Company Postal Code</label>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <comment><![CDATA[The postal code used to determine Tax Jurisdiction(s)]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </postalCode>
+                    </fields>
+                </vertex_seller_info>
+                <avaiable_shipping_product_codes>
+                    <label>Shipping Product Codes</label>
+                    <sort_order>3</sort_order>
+                    <show_in_default>1</show_in_default>
+                    <show_in_website>1</show_in_website>
+                    <show_in_store>1</show_in_store>
+                    <comment><![CDATA[<p class="switcher">List of avaiable shipping methods for Vertex TaxCentral mapping</p>]]></comment>
+                    <fields>
+                        <shipping_codes translate="label">
+                            <frontend_type>text</frontend_type>
+                            <frontend_model>vertextax/adminhtml_system_config_form_field_shippingCodes</frontend_model>
+                            <sort_order>10</sort_order>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </shipping_codes>
+                    </fields>
+                </avaiable_shipping_product_codes>
+                <classes translate="label">
+                    <label>Vertex Tax Classes</label>
+                    <comment><![CDATA[<p class="switcher">You can manage customer and product tax classes at Sales->Tax menu</p>]]></comment>
+                    <fields>
+                        <default_customer_code>
+                            <label>Default Customer Code</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>30</sort_order>
+                            <comment><![CDATA[Customer code which will be used for unregistered users and for customers without customer code value]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </default_customer_code>
+                        <creditmemo_adjustment_class>
+                            <label>Refund Adjustments Class</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>32</sort_order>
+                            <comment><![CDATA[Class which will be used for creditmemo adjustments]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </creditmemo_adjustment_class>
+                        <creditmemo_adjustment_negative_code>
+                            <label>Adjustment Fee Code</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>34</sort_order>
+                            <comment><![CDATA[Product code which will be used for creditmemo adjustment fee]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </creditmemo_adjustment_negative_code>
+                        <creditmemo_adjustment_positive_code>
+                            <label>Adjustment Refund Code</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>38</sort_order>
+                            <comment><![CDATA[Product code which will be used for creditmemo adjustment]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </creditmemo_adjustment_positive_code>
+                        <giftwrap_order_class>
+                            <label>Gift Wrap For Order Class</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>50</sort_order>
+                            <comment><![CDATA[Product class which will be used for order gift wrap]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </giftwrap_order_class>
+                        <giftwrap_order_code>
+                            <label>Gift Wrap For Order Code</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>60</sort_order>
+                            <comment><![CDATA[Product code which will be used for order gift wrap]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </giftwrap_order_code>
+                        <giftwrap_item_class>
+                            <label>Gift Wrap Class For Single Product</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>70</sort_order>
+                            <comment><![CDATA[Class for gift wrap of single product]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </giftwrap_item_class>
+                        <giftwrap_item_code>
+                            <label>Gift Wrap Code Prefix For Single Product</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>80</sort_order>
+                            <comment><![CDATA[Prefix will be used for giftwrap item. Each code will be {{prefix}}-{{sku}}]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </giftwrap_item_code>
+                        <printed_giftcard_class>
+                            <label>Item Line Class For Printed Gift Card</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>90</sort_order>
+                            <comment><![CDATA[Product Class for printed giftcard line item]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </printed_giftcard_class>
+                        <printed_giftcard_code>
+                            <label>Item Line Code For Printed Gift Card</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>100</sort_order>
+                            <comment><![CDATA[Product code for printed giftcard line item]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </printed_giftcard_code>
+                        <reward_points_class>
+                            <label>Class For Reward Points Discount Line Item</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>select</frontend_type>
+                            <source_model>adminhtml/system_config_source_shipping_taxclass</source_model>
+                            <sort_order>110</sort_order>
+                            <comment><![CDATA[Product Class for reward points order discount.]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </reward_points_class>
+                        <reward_points_code>
+                            <label>Product Code For Reward Points Discount Line Item</label>
+                            <validate>required-entry</validate>
+                            <frontend_type>text</frontend_type>
+                            <sort_order>120</sort_order>
+                            <comment><![CDATA[Product code for reward points order discount]]></comment>
+                            <show_in_default>1</show_in_default>
+                            <show_in_website>1</show_in_website>
+                            <show_in_store>1</show_in_store>
+                        </reward_points_code>
+                    </fields>
+                </classes>
+            </groups>
+        </tax>
+    </sections>
+</config>

@@ -1,0 +1,138 @@
+<?php
+
+/**
+ * @copyright   Vertex. All rights reserved.    https://www.vertexinc.com/
+ * @author      Mediotype                       https://www.mediotype.com/
+ */
+
+?>
+<?php if (Mage::helper('vertextax')->isVertexActive()): ?>
+    <style>
+        .address-window {z-index:9999; background: #fff; position:fixed; width:500px; height:auto; border: 1px solid #ccc; top: 55%; left:30%; display:none; }
+        .selectaddress-container { margin:auto; padding: 25px;}
+        .selectaddress-container h3 {text-align:center;}
+        .selectaddress-container .form-list .control  label, .selectaddress-container .form-list .control  label:hover {background-color: #fff;}
+        .bg-shadow {z-index: 999; position: absolute; top: 0; width: 100%; height:100%; display:none; background-color: #000; opacity: 0.5;}
+    </style>
+
+    <div id="select-tax-area-id" class="popup address-window">
+        <div id="order-tax-area-load"></div>
+    </div>
+    <div id="popup-shadow" class="bg-shadow">&nbsp;</div>
+    <script type="text/javascript">
+        if(typeof order.loadAreaResponseHandler !== "function"){
+            order.loadAreaResponseHandler = function(response){
+                if (response.error) {
+                    alert(response.message);
+                }
+                if(response.ajaxExpired && response.ajaxRedirect) {
+                    setLocation(response.ajaxRedirect);
+                }
+                if(!this.loadingAreas){
+                    this.loadingAreas = [];
+                }
+                if(typeof this.loadingAreas === 'string'){
+                    this.loadingAreas = [this.loadingAreas];
+                }
+                if(this.loadingAreas.indexOf('message')===-1) this.loadingAreas.push('message');
+                for(var i=0; i<this.loadingAreas.length; i++){
+                    var id = this.loadingAreas[i];
+                    if($(this.getAreaId(id))){
+                        if ('message' !== id || response[id]) {
+                            var wrapper = new Element('div');
+                            wrapper.update(response[id] ? response[id] : '');
+                            $(this.getAreaId(id)).update(wrapper);
+                        }
+                        if ($(this.getAreaId(id)).callback) {
+                            this[$(this.getAreaId(id)).callback]();
+                        }
+                    }
+                }
+            };
+        }
+        order.loadArea = function(area, indicator, params){
+            var url = this.loadBaseUrl;
+            if (area) {
+                if(typeof this.prepareArea === "function"){
+                    area = this.prepareArea(area);
+                }
+                url += 'block/' + area;
+            }
+            if (indicator === true) indicator = 'html-body';
+            params = this.prepareParams(params);
+            params.json = true;
+            if (!this.loadingAreas) this.loadingAreas = [];
+
+            if (indicator) {
+                this.loadingAreas = area;
+                new Ajax.Request(url, {
+                    parameters:params,
+                    loaderArea: indicator,
+                    onSuccess: function(transport) {
+                        var response = transport.responseText.evalJSON();
+                        this.loadAreaResponseHandler(response);
+
+                    }.bind(this),
+
+                    onComplete:  function() {
+                        if ( ( typeof area === 'string' &&  area!='header' && area!='totals' ) ||
+                            ( typeof area === 'object' && area[0]!='totals' &&  area[0]!='header' )  ||
+                            (typeof params['order[billing_address][city]']!='undefined' || typeof params['order[shipping_address][city]']!='undefined')  )
+                            getTaxAreaId(params);
+                    }.bind(this),
+                });
+            }
+            else {
+                new Ajax.Request(url, {parameters:params,loaderArea: indicator,
+                    onComplete: function() {
+                        if ( ( typeof area === 'string' &&  area!='header' && area!='totals' ) ||
+                            ( typeof area === 'object' && area[0]!='totals' &&  area[0]!='header' ) ||
+                            (typeof params['order[billing_address][city]']!='undefined' || typeof params['order[shipping_address][city]']!='undefined')  )  {
+                            getTaxAreaId(params);
+                        }
+                    }.bind(this)
+                });
+
+
+            }
+            if (typeof productConfigure != 'undefined' && area instanceof Array && area.indexOf('items') != -1) {
+                productConfigure.clean('quote_items');
+            }
+        };
+
+        function getTaxAreaId(params){
+            var request = new Ajax.Request(
+                '<?php echo Mage::getUrl('*/vertex/taxArea');?>' ,
+                {
+                    method:'post',
+                    onSuccess: SelectAddressSucess,
+                    parameters: params
+                }
+            );
+        }
+
+        function SelectAddressSucess(transport){
+            if (transport && transport.responseText){
+                try{
+                    response = eval('(' + transport.responseText + ')');
+                }
+                catch (e) {
+                    response = {};
+                }
+            }
+            if (response.error){
+                if ((typeof response.message) == 'string') {
+                    alert(response.message);
+                } else {
+                    alert(response.message.join("\n"));
+                }
+                return false;
+            }
+            if (response.message=='show_popup') {
+                $('order-tax-area-load').update(response.html);
+            } else {
+                order.loadArea(['totals','shipping_address'], true, {} );
+            }
+        }
+    </script>
+<?php endif; ?>

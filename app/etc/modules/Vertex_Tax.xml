@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @package     VertexSMB_Tax
+ * @license     http://opensource.org/licenses/OSL-3.0  The Open Software License 3.0 (OSL 3.0)
+ * @author      Alex Lukyanau
+ */
+-->
+<config>
+    <modules>
+        <Vertex_Tax>
+            <active>true</active>
+            <codePool>community</codePool>
+            <depends>
+                <Mage_Core/>
+                <Mage_Tax/>
+            </depends>
+        </Vertex_Tax>
+    </modules>
+</config>

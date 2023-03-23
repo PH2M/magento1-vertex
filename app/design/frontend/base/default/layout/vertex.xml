@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @copyright   Vertex. All rights reserved.    https://www.vertexinc.com/
+ * @author      Mediotype                       https://www.mediotype.com/
+ */
+ -->
+<layout version="0.1.0">
+    <checkout_onepage_index>
+         <update handle="vertex_popup" />
+    </checkout_onepage_index>
+    
+     <vertex_popup>
+        <reference name="before_body_end">
+            <block type="core/template"   template="vertex/popup.phtml"/>
+        </reference>
+    </vertex_popup>
+</layout>

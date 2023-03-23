@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * @copyright   Vertex. All rights reserved.    https://www.vertexinc.com/
+ * @author      Mediotype                       https://www.mediotype.com/
+ */
+ -->
+<layout version="0.1.0">
+    <adminhtml_sales_order_create_index>
+        <reference name="before_body_end">
+            <block  type="core/template"  template="vertex/popup.phtml">
+            	<action method="unsetData"><key>cache_lifetime</key></action>
+            	<action method="unsetData"><key>cache_tags</key></action>
+            </block>
+        </reference>
+    </adminhtml_sales_order_create_index>
+	<adminhtml_system_config_edit>
+		<reference name="before_body_end">
+			<block type="vertextax/adminhtml_system_config_settings" name="vertex_hide_enterprize" template="vertex/script.phtml"/>
+		</reference>
+	</adminhtml_system_config_edit>
+</layout>   

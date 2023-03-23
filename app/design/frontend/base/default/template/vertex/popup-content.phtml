@@ -1,0 +1,114 @@
+<?php
+
+/**
+ * @copyright   Vertex. All rights reserved.    https://www.vertexinc.com/
+ * @author      Mediotype                       https://www.mediotype.com/
+ */
+
+?>
+<?php $responseCollection = $this->getItemsCollection(); ?>
+<?php $firstItem = $this->getFirstItem(); ?>
+<?php $isMultiple = $this->getIsMultiple(); ?>
+<div class="selectaddress-container step a-item">
+    <div lass="col1-set">
+        <?php if ($isMultiple): ?>
+            <h3><?php echo $this->__('Please verify your address'); ?></h3>
+            <ul class="form-list">
+                <li class="control">
+                    <?php echo $this->__('Your shipping address may be updated according to selection'); ?>
+                </li>
+                <?php foreach ($responseCollection as $taxResponse): ?>
+                    <li class="control">
+                        <input type="radio"
+                               class="radio"
+                               id="tax_area_id_<?php echo $this->escapeHtml($taxResponse->getTaxAreaId()); ?>"
+                               value="<?php echo $this->escapeHtml($taxResponse->getTaxAreaId()); ?>"
+                               name="tax_area_id">
+                        <label for="tax_area_id_<?php echo $this->escapeHtml($taxResponse->getTaxAreaId()); ?>">
+                            <?php echo $this->escapeHtml($taxResponse->getAreaName()); ?>
+                        </label>
+                        <input type="hidden"
+                               name="city_<?php echo $this->escapeHtml($taxResponse->getTaxAreaId()); ?>"
+                               id="tax_city_<?php echo $this->escapeHtml($taxResponse->getTaxAreaId()); ?>"
+                               value="<?php echo $this->escapeHtml($taxResponse->getTaxAreaCity()); ?>"/>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+        <?php else: ?>
+            <h3><?php echo $this->__('Your shipping address has been updated'); ?></h3>
+            <ul class="form-list">
+                <li class="control">
+                    <label>
+                        <?php echo $this->__('Original City: %s', $this->escapeHtml($firstItem->getRequestCity())); ?>
+                    </label>
+                </li>
+                <li class="control">
+                    <label>
+                        <?php echo $this->__('Validated City: %s', $this->escapeHtml($firstItem->getTaxAreaCity())); ?>
+                    </label>
+                </li>
+            </ul>
+        <?php endif; ?>
+        <div class="buttons-set">
+            <p class="required">&nbsp;</p>
+            <button onclick="javascript:void(0);" class="button" type="button" id="onepage-select-tax-area-button">
+                <span><span><?php echo $this->__('Continue'); ?></span></span>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('opc-selectaddress').style.display = "block";
+    $('popup-shadow').style.display = "block";
+    $('onepage-select-tax-area-button').observe('click', select_address);
+
+    function select_address() {
+        <?php if ($isMultiple):?>
+        var tax_area_id = $$('input:checked[type="radio"][name="tax_area_id"]').pluck('value');
+        <?php else: ?>
+        var tax_area_id = "<?php echo $this->escapeHTML($firstItem->getTaxAreaId()); ?>";
+        <?php endif;?>
+
+        if (tax_area_id == "undefined" || tax_area_id.length == 0) {
+            alert('Please select address');
+            return false;
+        }
+        <?php if ($isMultiple):?>
+        var new_city = $('tax_city_' + tax_area_id).value;
+        <?php else: ?>
+        var new_city = "<?php echo $firstItem->getTaxAreaCity(); ?>";
+        <?php endif;?>
+        $('opc-selectaddress').style.display = "none";
+        $('popup-shadow').style.display = "none";
+        if (typeof  shipping !== 'undefined') {
+            var success_event = shipping;
+            var form_object = $('co-shipping-form');
+        } else {
+            var success_event = billing;
+            var form_object = $('co-billing-form');
+        }
+        form_object.innerHTML +=
+            '<input id="tax_area_id_el" type="hidden" name="tax_area_id" value="' + tax_area_id + '" />\n\
+             <input id="tax_new_city_el" type="hidden" name="tax_new_city" value="' + new_city + '" />';
+
+        var request = new Ajax.Request(
+            '<?php echo Mage::getUrl('checkout/onepage/saveTaxArea');?>',
+            {
+                method: 'post',
+                onComplete: SelectAddressComplete,
+                onSuccess: success_event.onSave,
+                parameters: form_object.serialize(true)
+            }
+        );
+    }
+
+    function SelectAddressComplete() {
+        $('tax_area_id_el').remove();
+        $('tax_new_city_el').remove();
+        checkout.reloadProgressBlock('billing');
+        checkout.reloadProgressBlock('shipping');
+        checkout.reloadProgressBlock('shipping_method');
+        checkout.reloadProgressBlock('payment_method');
+    }
+</script>

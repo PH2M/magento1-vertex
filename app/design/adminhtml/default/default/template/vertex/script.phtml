@@ -1,0 +1,16 @@
+<?php
+if (!Mage::getConfig()->getModuleConfig('Enterprise_Enterprise') ||
+    !Mage::getConfig()->getModuleConfig('Enterprise_Enterprise')->is('active', 'true')):
+?>
+<script type="text/javascript">
+    var enterpriseConfig = ['giftwrap_order_class','giftwrap_order_code','giftwrap_item_class','giftwrap_item_code','printed_giftcard_class','printed_giftcard_code','reward_points_class','reward_points_code'];
+    var prefix = 'tax_classes_';
+    enterpriseConfig.each(function (elem) {
+        var field = $(prefix + elem);
+        if(field && field.up("tr")){
+            field.up("tr").remove()
+        }
+    });
+
+</script>
+<?php endif;?>
